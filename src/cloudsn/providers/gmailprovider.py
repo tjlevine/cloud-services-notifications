@@ -37,8 +37,13 @@ class GMailProvider(Provider):
         if 'labels' in account.get_properties():
             labels += [l.strip() for l in account["labels"].split(",")]
 
-        if 'inbox' not in labels and '' not in labels:
-            labels.append('inbox')
+        # don't sync my inbox unless I ask you to please.
+        # there should really be an option to ignore the inbox
+        # because I only want to be notified of mail that
+        # appears in my Important label
+
+        if '/Important' not in labels and '' not in labels:
+            labels.append('/Important')
 
         credentials = account.get_credentials()
         for label in labels:
